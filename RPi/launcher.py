@@ -42,7 +42,12 @@ else:
     ui_module = importlib.import_module(args.ui_module, 'RPi')
 
     plugin_modules = map(importlib.import_module, args.plugin_module)
-    plugins = list(map(lambda m: m.create_plugin(), plugin_modules))
+    plugins = []
+    try:
+        plugins = list(map(lambda m: m.create_plugin(), plugin_modules))
+    except:
+        print('Error, todo fix this')
+    
     fcntl.fcntl(server_rfd, fcntl.F_SETFL, os.O_NONBLOCK)
     pipe = Pipe(os.fdopen(server_wfd, 'wb'), os.fdopen(server_rfd, 'rb'))
 
